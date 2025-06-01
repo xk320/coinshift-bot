@@ -1,0 +1,8 @@
+{
+  "accounts": [
+    {
+      "private_key": "0xxxxxxx",
+      "proxy": "http://xxxxxx"
+    }
+  ]
+}
