@@ -25,14 +25,14 @@
     ```bash
     # 示例：下载 Go (请替换为最新版本)
     # 例如，若最新版为 go1.23.0:
-    wget [https://go.dev/dl/go1.23.0.linux-amd64.tar.gz](https://go.dev/dl/go1.23.0.linux-amd64.tar.gz)
+    wget https://go.dev/dl/go1.24.3.linux-amd64.tar.gz
     ```
 
 2.  **解压安装包:**
     建议将其解压到 `/usr/local`。
     ```bash
     # 确保替换为下载的实际文件名
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.23.0.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.3.linux-amd64.tar.gz
     ```
 
 3.  **配置环境变量:**
