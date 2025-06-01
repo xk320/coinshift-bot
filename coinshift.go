@@ -429,7 +429,7 @@ func GetCurrentTimeInISO8601() string {
 }
 
 // DeformLoginRequest 向 deform.cc 发送登录请求
-func DeformLoginRequest(authToken string) (string, error) {
+func DeformLoginRequest(authToken, proxyURL string) (string, error) {
 	// 1. 准备请求URL
 	url := "https://api.deform.cc/"
 
@@ -462,7 +462,7 @@ func DeformLoginRequest(authToken string) (string, error) {
 	setDeformRequestHeaders(req)
 
 	// 6. 创建HTTP客户端并发送请求
-	client := &http.Client{Timeout: 10 * time.Second}
+	client, err := createHTTPClient(proxyURL)
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("请求发送失败: %v", err)
@@ -488,7 +488,7 @@ func DeformLoginRequest(authToken string) (string, error) {
 
 	return response.Data.UserLogin, nil
 }
-func VerifyActivity(activityId, bearerToken, privyIdToken string) (string, error) {
+func VerifyActivity(activityId, bearerToken, privyIdToken, proxyURL string) (string, error) {
 	// 1. 准备请求URL
 	uri := "https://api.deform.cc/"
 
@@ -573,7 +573,7 @@ func VerifyActivity(activityId, bearerToken, privyIdToken string) (string, error
 	req.Header.Set("Authorization", "Bearer "+bearerToken)
 	req.Header.Set("Privy-Id-Token", privyIdToken)
 	// 6. 创建HTTP客户端并发送请求
-	client := &http.Client{Timeout: 10 * time.Second}
+	client, err := createHTTPClient(proxyURL)
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("请求发送失败: %v", err)
@@ -699,7 +699,7 @@ func main() {
 		logInfo("链接账户数: %d", len(authResponse.User.LinkedAccounts))
 		logInfo("是否新用户: %d", authResponse.IsNewUser)
 
-		token, err := DeformLoginRequest(authResponse.Token)
+		token, err := DeformLoginRequest(authResponse.Token, account.Proxy)
 		if err != nil {
 			logError("登录失败: %v", err)
 		}
@@ -714,7 +714,7 @@ func main() {
 
 		// 循环处理每个活动ID
 		for _, activityID := range activityIDs {
-			activity, err := VerifyActivity(activityID, token, authResponse.IdentityToken)
+			activity, err := VerifyActivity(activityID, token, authResponse.IdentityToken, account.Proxy)
 			if err != nil {
 				logError("活动 %s 领取失败: %v", activityID, err)
 			} else {
