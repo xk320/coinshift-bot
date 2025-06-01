@@ -161,6 +161,7 @@
     ```bash
     # 示例：假设您的项目在 ~/coinshift-bot
     # cd ~/coinshift-bot
+    chmod 755 coinshift
     ./coinshift
     ```
 
